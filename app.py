@@ -1,9 +1,16 @@
 from flask import Flask, send_from_directory, render_template, url_for
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
+DOWNLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER")
+print(DOWNLOAD_FOLDER)
+
+
 app = Flask(__name__)
 
 
-app.config["UPLOAD_FOLDER"] = "data"
+app.config["UPLOAD_FOLDER"] = DOWNLOAD_FOLDER
 
 
 
