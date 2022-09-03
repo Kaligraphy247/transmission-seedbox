@@ -1,0 +1,10 @@
+download page
+
+{{files}}
+<br>
+{% for file in files %}
+    
+    <a href="{{ url_for('download', filename=file) }}">{{file}}</a><br>
+
+{% endfor %}
+
