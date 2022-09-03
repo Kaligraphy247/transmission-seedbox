@@ -1,3 +1,3 @@
 # transmission-seedbox
 
-- for my seedbox
+## For my seedbox, private for now
