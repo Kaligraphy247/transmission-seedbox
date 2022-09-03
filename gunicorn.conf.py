@@ -8,3 +8,4 @@ workers = 4
 timeout = 120
 worker_connections = 1000
 keep_alive = 2
+reload = "True"
