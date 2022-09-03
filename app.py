@@ -4,7 +4,6 @@ import os
 
 load_dotenv()
 DOWNLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER")
-print(DOWNLOAD_FOLDER)
 
 
 app = Flask(__name__)
