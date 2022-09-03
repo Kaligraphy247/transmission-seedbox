@@ -22,7 +22,7 @@ def download_page():
 def download(filename):
 	uploads = app.config["UPLOAD_FOLDER"]
 	print(uploads)
-	return send_from_directory(uploads, path=filename)#, as_attachment=True
+	return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
 
 
 
