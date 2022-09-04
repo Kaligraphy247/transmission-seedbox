@@ -13,6 +13,8 @@ Description=Gunicorn server for <myseedboxname or NameOfYourChoice>
 User=<root or your username>
 WorkingDirectory=<pathToYourSeedboxDirector>
 ExecStart=/bin/bash -c 'cd <projectDirectory> && source <venvDir>/bin/activate && gunicorn wsgi:app'
+Restart=always
+
 
 [Install]
 WantedBy=multi-user.target
@@ -34,7 +36,7 @@ sudo systemctl start <NameOfServiceYouJustCreated>.service
 sudo systemctl status <NameOfServiceYouJustCreated>.service
 ```
 
-- enable your service on every reboot
+- to enable your service on every reboot
 ```bash
 sudo systemctl enable <NameOfServiceYouJustCreated>.service
 ```
