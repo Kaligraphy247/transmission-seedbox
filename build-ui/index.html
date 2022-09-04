@@ -1,15 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/tailwind.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/tailwind.css" />
     <title>Home</title>
-</head>
-<body class="body-font">
+  </head>
+  <body class="body-font min-h-[100%]">
+    <header
+      class="border-b-2 border-gray-100 shadow-md rounded-sm shadow-gray-300 py-8 text-center text-xl">
+      <ul class="inline-flex space-x-16 md:space-x-48 lg:space-x-96">
+        <li class="list-none">
+          <a href="#" class="hover:text-gray-600 active:text-green-500">Home</a>
+        </li>
+        <!-- <li class="list-none"><a href="#" class="hover:text-gray-600 active:text-green-500">Download</a></li> -->
+        <li class="list-none">
+          <a href="upload.html" class="hover:text-gray-600 active:text-green-500">Upload</a>
+        </li>
+      </ul>
+    </header>
 
-    normal text
-<script src="static/script.js"></script>
-</body>
+    <div
+      class="border-2 border-gray-300 rounded-sm shadow-sm mx-2 my-4 lg:w-[75%] lg:mx-auto"
+    >
+      <p class="text-lg mx-2 pt-4 text-center">All Downloaded Files</p>
+      <div
+        class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md"
+      >
+        <p><a href="#" class="hover:text-blue-400">File name</a></p>
+        <div class="text-sm text-gray-500 inline-flex">
+          <p class="cursor-pointer">created at&ensp;&middot;&ensp;</p>
+          <p class="cursor-pointer">size</p>
+        </div>
+      </div>
+      <div
+        class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md"
+      >
+        <p><a href="#" class="hover:text-blue-400">File name</a></p>
+        <div class="text-sm text-gray-500 inline-flex">
+          <p class="cursor-pointer">created at&ensp;&middot;&ensp;</p>
+          <p class="cursor-pointer">size</p>
+        </div>
+      </div>
+      <div
+        class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md"
+      >
+        <p><a href="#" class="hover:text-blue-400">File name</a></p>
+        <div class="text-sm text-gray-500 inline-flex">
+          <p class="cursor-pointer">created at&ensp;&middot;&ensp;</p>
+          <p class="cursor-pointer">size</p>
+        </div>
+      </div>
+      <div
+        class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md"
+      >
+        <p><a href="#" class="hover:text-blue-400">File name</a></p>
+        <div class="text-sm text-gray-500 inline-flex">
+          <p class="cursor-pointer">created at&ensp;&middot;&ensp;</p>
+          <p class="cursor-pointer">size</p>
+        </div>
+      </div>
+      <div
+        class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md"
+      >
+        <p><a href="#" class="hover:text-blue-400">File name</a></p>
+        <div class="text-sm text-gray-500 inline-flex">
+          <p class="cursor-pointer">created at&ensp;&middot;&ensp;</p>
+          <p class="cursor-pointer">size</p>
+        </div>
+      </div>
+      <div
+        class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md"
+      >
+        <p><a href="#" class="hover:text-blue-400">File name lore</a></p>
+        <div class="text-sm text-gray-500 inline-flex">
+          <p class="cursor-pointer">created at&ensp;&middot;&ensp;</p>
+          <p class="cursor-pointer">size</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="border-2 border-gray-300 rounded-sm shadow-sm mx-2 my-12 lg:w-[75%] lg:mx-auto">
+      <p class="text-lg text-center pt-4">Torrent Files</p>
+ 
+
+      <div id="normal" class="mx-2 my-4  px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md lg:mx-2">
+        <div class="overflow-x-auto relative shadow-md sm:rounded-lg border-2 border-gray-300 rounded-[5px] py-2 px-1">
+          <table class="w-full text-sm text-center text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+              <tr>
+                <th scope="col" class="py-3 px-6">Name</th>
+                <th scope="col" class="py-3 px-6">ID</th>
+                <th scope="col" class="py-3 px-6">Percentage downloaded</th>
+                <th scope="col" class="py-3 px-6">Total size</th>
+                <th scope="col" class="py-3 px-6">Up speed</th>
+                <th scope="col" class="py-3 px-6">down speed</th>
+                <th scope="col" class="py-3 px-6">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="bg-white border-b">
+                <td class="py-4 px-6">File 1</td>
+                <th scope="row" class="py-4 px-6 font-medium whitespace-nowrap"># 1</th>
+                <td class="py-4 px-6">100%</td>
+                <td class="py-4 px-6">20gb</td>
+                <td class="py-4 px-6">2gbps</td>
+                <td class="py-4 px-6">2gbps</td>
+                <td class="py-4 px-6">Done</td>
+              </tr>
+              <tr class="bg-gray-50 border-b">
+                <td class="py-4 px-6">File 2</td>
+                <th scope="row" class="py-4 px-6 font-medium whitespace-nowrap"># 2</th>
+                <td class="py-4 px-6">80%</td>
+                <td class="py-4 px-6">20gb</td>
+                <td class="py-4 px-6">2gbps</td>
+                <td class="py-4 px-6">2gbps</td>
+                <td class="py-4 px-6">Done</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <p class="mx-2 mb-1 text-xs text-center text-gray-400 hover:text-gray-600 bottom-0">
+      Check out my other works on <a href="https://github.com/Kaligraphy247" class="hover:text-violet-600" target="_blank">Github</a></p>
+    <p class="mx-2 mb-2 text-xs text-center text-gray-400 hover:text-gray-600">I am available for colabs, gainful employment or just side project</p>
+
+
+
+    <script src="static/script.js"></script>
+  </body>
 </html>

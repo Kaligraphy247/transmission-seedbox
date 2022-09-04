@@ -5,6 +5,10 @@ module.exports = {
     ],
     theme: {
       extend: {},
+      // screens: {
+      //   'xxs': '400px', // minwith
+
+      // },
     },
     plugins: [],
   }

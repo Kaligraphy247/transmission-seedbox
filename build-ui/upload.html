@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/tailwind.css" />
+    <title>Home</title>
+  </head>
+  <body class="body-font min-h-[100%]">
+    <header
+      class="border-b-2 border-gray-100 shadow-md rounded-sm shadow-gray-300 py-8 text-center text-xl">
+      <ul class="inline-flex space-x-16 md:space-x-48 lg:space-x-96">
+        <li class="list-none">
+          <a href="#" class="hover:text-gray-600 active:text-green-500">Home</a>
+        </li>
+        <!-- <li class="list-none"><a href="#" class="hover:text-gray-600 active:text-green-500">Download</a></li> -->
+        <li class="list-none">
+          <a href="upload.html" class="hover:text-gray-600 active:text-green-500">Upload</a>
+        </li>
+      </ul>
+    </header>
+
+    <body>
+        <div class="border-2 border-gray-300 mx-2 my-8 rounded shadow-sm lg:w-[50%] lg:my-40 lg:mx-auto ">
+            <form class="border-2 border-gray-300 rounded-[5px] shadow-md mx-2 my-2 py-1 px-2 text-sm grid">
+                <label class="pb-1">Upload torrent File</label>
+                <input type="file" name="file" id="" class="pb-1">
+                <p class="text-center border-b-[1px]">OR</p>
+                <label class="">Upload torrent File</label>
+                <input type="url" name="url" id="" class="py-1 px-1 mb-1 border-[1px] rounded-[4px] border-gray-400">
+                <div class="text-center my-2">
+                    <button type="submit" class="text-white bg-blue-500 w-12 h-6 rounded-[3px] hover:text-xs">Send</button>
+                </div>
+            </form>
+        </div>
+    </body>
+
+    <p class="mx-2 mb-1 text-xs text-center text-gray-400 hover:text-gray-600 bottom-0">
+        Check out my other works on <a href="https://github.com/Kaligraphy247" class="hover:text-violet-600" target="_blank">Github</a></p>
+      <p class="mx-2 mb-2 text-xs text-center text-gray-400 hover:text-gray-600">I am available for colabs, gainful employment or just side project</p>
+      <script src="static/script.js"></script>
+    </body>
+  </html>
