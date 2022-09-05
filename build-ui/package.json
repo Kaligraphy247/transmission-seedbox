@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite --port 5000",
     "build": "vite build",
-    "compile-css": "npx tailwindcss -i css/tailwind.css -o build/static/base.css",
-    "compile-css-mini": "npx tailwindcss -i css/tailwind.css -o build/base.min.css --minify"
+    "compile-css": "npx tailwindcss -i static/tailwind.css -o ../static/style.css",
+    "compile-css-mini": "npx tailwindcss -i static/tailwind.css -o ../static/style.min.css --minify"
   },
   "author": "",
   "license": "ISC",
