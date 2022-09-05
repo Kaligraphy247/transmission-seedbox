@@ -1,7 +1,9 @@
-from flask import Flask, send_from_directory, render_template, url_for
+from asyncio import subprocess
+from urllib import request
+from flask import Flask, send_from_directory, render_template, url_for, request
 from dotenv import load_dotenv
-# from datetime import datetime as dt
-import os, time
+
+import os, time, subprocess
 
 load_dotenv()
 DOWNLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER")
@@ -51,8 +53,18 @@ def download(filename):
 	print(uploads)
 	return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
 
-@app.route("/upload")
+@app.route("/upload", methods=["GET", "POST"])
 def upload():
+	if request.method == "POST":
+		file = request.files['file']
+		url = request.form.get('url')
+		if file != '':
+			subprocess.Popen(f'echo {file.filename}', shell=True) # debug
+			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{file}'", shell=True)
+		elif url != '':
+			# subprocess.Popen(f'echo {url}', shell=True) # debug
+			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{url}'", shell=True)
+		# print(file.filename, url)
 	return render_template('upload.html')
 
 if __name__ == "__main__":
