@@ -5,7 +5,8 @@ import os, time
 
 load_dotenv()
 DOWNLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER")
-
+ALLOWED_FILES = os.environ.get("ALLOWED_FILES")
+ALLOWED_FILES = tuple(ALLOWED_FILES)
 
 app = Flask(__name__)
 
@@ -19,7 +20,10 @@ app.config["UPLOAD_FOLDER"] = DOWNLOAD_FOLDER
 def index():
 	all_files_info = []
 	files = os.listdir(app.config["UPLOAD_FOLDER"]) # files in current directory
-	# file_name = files # same as above, used exclusively for each file's name 
+
+	# same as above, used exclusively for each file's name folders are ignored
+	file_name = [file for file in files if file.endswith(ALLOWED_FILES)]
+
 
 	# The complex list comprehension below generates a list of the file sizes
 	#  already converted to megabytes (mb)
@@ -31,10 +35,8 @@ def index():
 	created_at = [os.stat(f"{app.config['UPLOAD_FOLDER']}/{file}").st_mtime for file in files]
 	created_at = [f"{time.gmtime(mtime).tm_year}.{time.gmtime(mtime).tm_mon}.{time.gmtime(mtime).tm_wday} {time.gmtime(mtime).tm_hour}:{time.gmtime(mtime).tm_min}:{time.gmtime(mtime).tm_sec}" for mtime in created_at]
 	
-	for name, timestamp, size in zip(files, created_at, file_size):
+	for name, timestamp, size in zip(file_name, created_at, file_size):
 		all_files_info.extend([[name, timestamp, size]])
-
-
 	return render_template("index.html", files=all_files_info)
 
 @app.route("/download")
@@ -49,7 +51,9 @@ def download(filename):
 	print(uploads)
 	return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
 
-
+@app.route("/upload")
+def upload():
+	return render_template('upload.html')
 
 if __name__ == "__main__":
 	app.run(use_reloader=True, debug=True)

@@ -12,11 +12,11 @@
       class="border-b-2 border-gray-100 shadow-md rounded-sm shadow-gray-300 py-8 text-center text-xl">
       <ul class="inline-flex space-x-16 md:space-x-48 lg:space-x-96">
         <li class="list-none">
-          <a href="#" class="hover:text-gray-600 active:text-green-500">Home</a>
+          <a href="{{ url_for('index') }}" class="hover:text-gray-600 active:text-green-500">Home</a>
         </li>
         <!-- <li class="list-none"><a href="#" class="hover:text-gray-600 active:text-green-500">Download</a></li> -->
         <li class="list-none">
-          <a href="upload.html" class="hover:text-gray-600 active:text-green-500">Upload</a>
+          <a href="{{ url_for('upload') }}" class="hover:text-gray-600 active:text-green-500">Upload</a>
         </li>
       </ul>
     </header>

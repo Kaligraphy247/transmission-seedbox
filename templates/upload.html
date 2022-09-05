@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<body>
+    <div class="border-2 border-gray-300 mx-2 my-8 rounded shadow-sm lg:w-[50%] lg:my-40 lg:mx-auto ">
+        <form class="border-2 border-gray-300 rounded-[5px] shadow-md mx-2 my-2 py-1 px-2 text-sm grid">
+            <label class="pb-1">Upload torrent File</label>
+            <input type="file" name="file" id="" class="pb-1">
+            <p class="text-center border-b-[1px]">OR</p>
+            <label class="">Paste link to torrent file</label>
+            <input type="url" name="url" id="" class="py-1 px-1 mb-1 border-[1px] rounded-[4px] border-gray-400">
+            <div class="text-center my-2">
+                <button type="submit" class="text-white bg-blue-500 w-12 h-6 rounded-[3px] hover:text-xs">Send</button>
+            </div>
+        </form>
+    </div>
+</body>
+{% endblock content %}
