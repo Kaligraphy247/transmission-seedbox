@@ -66,7 +66,7 @@ def upload():
 			file.save(temp_file)
 			time.sleep(5) # wait 5 seconds after file is saved? an add torrent
 			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{temp_file}'", shell=True)
-			time.sleep(120) # wait, 2 minutes abd clear .torrent file
+			time.sleep(120) # wait, 2 minutes and clear .torrent file
 			os.remove(temp_file)
 			print(f"deleted torrent file: {temp_file}")
 
