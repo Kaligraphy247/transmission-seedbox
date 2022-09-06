@@ -1,4 +1,6 @@
 from asyncio import subprocess
+from genericpath import isdir
+from pydoc import render_doc
 from urllib import request
 from flask import Flask, send_from_directory, render_template, url_for, request
 from dotenv import load_dotenv
@@ -21,10 +23,16 @@ app.config["UPLOAD_FOLDER"] = DOWNLOAD_FOLDER
 @app.route("/index")
 def index():
 	all_files_info = []
+	# test
+	download = app.config["UPLOAD_FOLDER"]
+	folders = []
 	files = os.listdir(app.config["UPLOAD_FOLDER"]) # files in current directory
 
 	# same as above, used exclusively for each file's name folders are ignored
 	file_name = [file for file in files if file.endswith(ALLOWED_FILES)]
+	for file in files:
+		if os.path.isdir(f"{app.config['UPLOAD_FOLDER']}/{file}"):
+			folders.append(file)
 
 
 	# The complex list comprehension below generates a list of the file sizes
@@ -32,17 +40,17 @@ def index():
 	file_size = [os.stat((f"{app.config['UPLOAD_FOLDER']}/{file}")) for file in files]
 	file_size = [round(file.st_size / (1024 * 1024), 3) for file in file_size] # converts to mb and rounds to 3 decimal places
 
-	# This complex list comprehension below generates a list of the file timstamp
-	# converted to gmtime
+	# This complex list comprehension below generates a list of the file's timestamp
+	# converted parsed in strftime
 	created_at = [os.stat(f"{app.config['UPLOAD_FOLDER']}/{file}").st_mtime for file in files]
-	# created_at = [f"{time.gmtime(mtime).tm_year}.{time.gmtime(mtime).tm_mon}.{time.gmtime(mtime).tm_wday} {time.gmtime(mtime).tm_hour}:{time.gmtime(mtime).tm_min}:{time.gmtime(mtime).tm_sec}" for mtime in created_at]
-	created_at = [dt.fromtimestamp(mtime) for mtime in created_at]
-	created_at = [dt.strftime(mtime, "%Y-%m-%d %H:%M:%S") for mtime in created_at]
+	created_at = [dt.strftime(dt.fromtimestamp(mtime), "%Y-%m-%d %H:%M:%S") for mtime in created_at]
 
 	
-	for name, timestamp, size in zip(files, created_at, file_size):
-		all_files_info.extend([[name, timestamp, size]])
-	return render_template("index.html", files=all_files_info)
+	for name, folder, timestamp, size in zip(files, folders, created_at, file_size):
+		all_files_info.extend([[name, folder, timestamp, size]])
+	return render_template("index.html", files=all_files_info, root=download)
+
+
 
 @app.route("/download")
 def download_page():
@@ -81,6 +89,11 @@ def upload():
 			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{url}'", shell=True)
 		# print(file.filename, url)
 	return render_template('upload.html')
+
+
+
+
+
 
 if __name__ == "__main__":
 	app.run(use_reloader=True, debug=True)
