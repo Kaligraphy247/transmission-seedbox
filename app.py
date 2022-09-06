@@ -2,7 +2,7 @@ from asyncio import subprocess
 from urllib import request
 from flask import Flask, send_from_directory, render_template, url_for, request
 from dotenv import load_dotenv
-
+from datetime import datetime as dt
 import os, time, subprocess
 
 load_dotenv()
@@ -35,9 +35,12 @@ def index():
 	# This complex list comprehension below generates a list of the file timstamp
 	# converted to gmtime
 	created_at = [os.stat(f"{app.config['UPLOAD_FOLDER']}/{file}").st_mtime for file in files]
-	created_at = [f"{time.gmtime(mtime).tm_year}.{time.gmtime(mtime).tm_mon}.{time.gmtime(mtime).tm_wday} {time.gmtime(mtime).tm_hour}:{time.gmtime(mtime).tm_min}:{time.gmtime(mtime).tm_sec}" for mtime in created_at]
+	# created_at = [f"{time.gmtime(mtime).tm_year}.{time.gmtime(mtime).tm_mon}.{time.gmtime(mtime).tm_wday} {time.gmtime(mtime).tm_hour}:{time.gmtime(mtime).tm_min}:{time.gmtime(mtime).tm_sec}" for mtime in created_at]
+	created_at = [dt.fromtimestamp(mtime) for mtime in created_at]
+	created_at = [dt.strftime(mtime, "%Y-%m-%d %H:%M:%S") for mtime in created_at]
+
 	
-	for name, timestamp, size in zip(file_name, created_at, file_size):
+	for name, timestamp, size in zip(files, created_at, file_size):
 		all_files_info.extend([[name, timestamp, size]])
 	return render_template("index.html", files=all_files_info)
 
@@ -65,7 +68,7 @@ def upload():
 			print(temp_file)
 			file.save(temp_file)
 			time.sleep(5) # wait 5 seconds after file is saved? an add torrent
-			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{temp_file}'", shell=True)
+			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a {temp_file}", shell=True)
 			time.sleep(60) # wait, 1 minute and then clear .torrent file
 			os.remove(temp_file)
 			print(f"deleted torrent file: {temp_file}")
