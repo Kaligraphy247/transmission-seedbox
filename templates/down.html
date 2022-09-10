@@ -1,0 +1,5 @@
+folder view
+
+{% for folder in folders %}
+<p><a href="{{ url_for('download2', filename=folder) }}">{{folder}}</a></p>
+{% endfor %}

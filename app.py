@@ -1,11 +1,7 @@
-from asyncio import subprocess
-from genericpath import isdir
-from pydoc import render_doc
-from urllib import request
-from flask import Flask, send_from_directory, render_template, url_for, request
+from flask import Flask, send_from_directory, render_template, url_for, request, send_file
 from dotenv import load_dotenv
 from datetime import datetime as dt
-import os, time, subprocess
+import os, time, subprocess, glob
 
 load_dotenv()
 DOWNLOAD_FOLDER = os.environ.get("DOWNLOAD_FOLDER")
@@ -59,10 +55,18 @@ def download_page():
 
 
 @app.route("/download/<path:filename>")
+def download2(filename):
+	uploads = app.config["UPLOAD_FOLDER"]
+	print(uploads)
+	return send_file(filename, as_attachment=True)
+
+
+@app.route("/download/<path:filename>")
 def download(filename):
 	uploads = app.config["UPLOAD_FOLDER"]
 	print(uploads)
 	return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
+
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
@@ -91,7 +95,32 @@ def upload():
 	return render_template('upload.html')
 
 
+@app.route('/folder')
+def folder_view():
+	folders = []
+	files = []
+	for entry in os.scandir(app.config['UPLOAD_FOLDER']):
+		if entry.is_dir():
+			folders.append(entry)
+		else:
+			files.append(entry)
+	# for folder in folders: print(folder.name)
+	y = [x for x in range(10)]
+	# files = [file for file in files.name]
+	# print(files, " and ", folders)
+	return render_template("down.html", files=files, folders=folders, y=y)
 
+
+@app.route('/folderv/<path:folder>')
+def folderv(folder):
+	folders = []
+	files = []
+	for path in glob.glob(f"{app.config['UPLOAD_FOLDER']}/*/**", recursive=True):
+		if not os.path.isdir(path):
+			# path = path.split()
+			folders.append(path)
+	
+	return render_template("down.html", folders=folders)
 
 
 
