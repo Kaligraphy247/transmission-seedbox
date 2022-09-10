@@ -117,9 +117,10 @@ def folderv(folder):
 	files = []
 	for path in glob.glob(f"{app.config['UPLOAD_FOLDER']}/*/**", recursive=True):
 		if not os.path.isdir(path):
-			# path = path.split()
+			path2 = path.split('\\')
+			files.append(path2)
 			folders.append(path)
-	
+	print(files)
 	return render_template("down.html", folders=folders)
 
 
