@@ -737,6 +737,11 @@ video {
   padding-bottom: 2rem;
 }
 
+.px-4{
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .px-2{
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -776,6 +781,10 @@ video {
   padding-top: 1rem;
 }
 
+.pl-4{
+  padding-left: 1rem;
+}
+
 .pb-1{
   padding-bottom: 0.25rem;
 }
@@ -792,6 +801,10 @@ video {
 .text-lg{
   font-size: 1.125rem;
   line-height: 1.75rem;
+}
+
+.text-\[10px\]{
+  font-size: 10px;
 }
 
 .text-sm{
@@ -864,6 +877,14 @@ video {
   /* color: aliceblue; */
 }
 
+.hover\:cursor-pointer:hover{
+  cursor: pointer;
+}
+
+.hover\:text-\[11px\]:hover{
+  font-size: 11px;
+}
+
 .hover\:text-xs:hover{
   font-size: 0.75rem;
   line-height: 1rem;
@@ -872,6 +893,16 @@ video {
 .hover\:text-gray-600:hover{
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+.hover\:text-violet-500:hover{
+  --tw-text-opacity: 1;
+  color: rgb(139 92 246 / var(--tw-text-opacity));
+}
+
+.hover\:text-indigo-500:hover{
+  --tw-text-opacity: 1;
+  color: rgb(99 102 241 / var(--tw-text-opacity));
 }
 
 .hover\:text-blue-400:hover{

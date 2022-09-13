@@ -1,7 +1,7 @@
-from flask import Flask, send_from_directory, render_template, url_for, request, send_file
+from flask import Flask, send_from_directory, render_template, url_for, request, send_file, redirect
 from dotenv import load_dotenv
 from datetime import datetime as dt
-import os, time, subprocess, glob
+import os, time, subprocess, shutil
 
 load_dotenv()
 DOWNLOAD_FOLDER = os.environ.get("DOWNLOAD_FOLDER")
@@ -13,7 +13,13 @@ app = Flask(__name__)
 
 app.config["UPLOAD_FOLDER"] = DOWNLOAD_FOLDER
 
+# error handlers
+# app.register_error_handler(500, error_500)
 
+# @app.errorhandler(500)
+# def error_500(e):
+# 	'''Internal server error handler'''
+# 	return "Error 500, nothing much to tell you at this point", 500
 
 @app.route("/")
 @app.route("/index")
@@ -48,24 +54,25 @@ def index():
 
 
 
+
 @app.route("/download")
 def download_page():
 	files = os.listdir(app.config["UPLOAD_FOLDER"])
 	return render_template("download.html", files=files)
 
 
-@app.route("/download/<path:filename>")
-def download2(filename):
-	uploads = app.config["UPLOAD_FOLDER"]
-	print(uploads)
-	return send_file(filename, as_attachment=True)
+# @app.route("/download/<path:filename>")
+# def download2(filename):
+# 	uploads = app.config["UPLOAD_FOLDER"]
+# 	print(uploads)
+# 	return send_file(filename, as_attachment=True)
 
 
 @app.route("/download/<path:filename>")
 def download(filename):
-	uploads = app.config["UPLOAD_FOLDER"]
-	print(uploads)
-	return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
+	filename = os.path.abspath(filename)
+	return send_file(filename, as_attachment=True)
+	# return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
 
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -97,31 +104,89 @@ def upload():
 
 @app.route('/folder')
 def folder_view():
-	folders = []
-	files = []
-	for entry in os.scandir(app.config['UPLOAD_FOLDER']):
-		if entry.is_dir():
-			folders.append(entry)
-		else:
-			files.append(entry)
-	# for folder in folders: print(folder.name)
-	y = [x for x in range(10)]
-	# files = [file for file in files.name]
-	# print(files, " and ", folders)
-	return render_template("down.html", files=files, folders=folders, y=y)
+	# lambda function to convert size to mb only
+	to_mb = lambda size: round(size / (1024 * 1024), 2)
+
+	# lambda function to convert secs since unix epoch
+	created_at = lambda secs_since_unix_epoch: dt.strftime(
+			dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
+	
+	dirs = os.scandir()
+	return render_template("folderv2.html", dirs=dirs, to_mb=to_mb, timestamp=created_at, os=os, len=len, cwd=os.getcwd())
 
 
-@app.route('/folderv/<path:folder>')
-def folderv(folder):
-	folders = []
-	files = []
-	for path in glob.glob(f"{app.config['UPLOAD_FOLDER']}/*/**", recursive=True):
-		if not os.path.isdir(path):
-			path2 = path.split('\\')
-			files.append(path2)
-			folders.append(path)
-	print(files)
-	return render_template("down.html", folders=folders)
+@app.route('/cd')
+def cd():
+	try:
+		os.chdir(request.args.get('path'))
+	except PermissionError:
+		return "You do not have persmission to view this folder or file"
+	return redirect('/folder')
+
+
+@app.route('/md')
+def md():
+    # create new folder
+    new_folder = request.args.get('folder')
+    try:
+        os.mkdir(new_folder)
+    except FileExistsError:
+        return "Folder or file already exists"
+    # redirect to file manager
+    return redirect('/folder')
+
+
+@app.route('/rm')
+def rm():
+    # create new folder
+    folder = request.args.get('dir')
+    try:
+        os.rmdir(folder) # only empty folders
+    except OSError:
+        return """folder is not empty, please check before deleting""" # or <a href="force-rm?dir=dir">Here</a> to force delete"""
+    # shutil.rmtree(folder) # delete folders recursively
+
+    # redirect to file manager
+    return redirect('/folder')
+
+
+@app.route('/force-rm')
+def force_rm():
+    # create new folder
+    folder = request.args.get('dir')
+    # try:
+    #     os.rmdir(folder) # only empty folders
+    # except OSError:
+    #     return """folder is not empty, please check before deleting or <a href="https://www.google.com">Here</a> to force delete"""
+    shutil.rmtree(folder) # delete folders recursively
+
+    # redirect to file manager
+    return redirect('/folder')
+
+
+@app.route('/view')
+def view():
+    # content = subprocess.check_output(f"bat {request.args.get('file')}")
+    # get the file content
+    with open(request.args.get('file'), 'r',) as file:
+        return file.read().replace('\n', '<br>')
+
+
+@app.route('/rm-file')
+def rm_file():
+    # file = os.remove(request.args.get('file'))
+    file = "to be deleted"
+    print("Deleted ", file)
+    return redirect('/folder')
+
+
+@app.route('/view-img')
+def view_img():
+    img = "an image"
+
+    print("Deleted ",)
+    return redirect('/folder')
+
 
 
 
