@@ -6,23 +6,31 @@
 
 {% block content %}
 
+<div class="border-2 border-gray-300 rounded-sm shadow-sm mx-2 mt-8  mb-4 lg:w-[75%] lg:mx-auto">
 
-    <div class="border-2 border-gray-300 rounded-sm shadow-sm mx-2 mt-8  mb-4 lg:w-[75%] lg:mx-auto">
-        <p class="text-lg mx-2 pt-4 text-center">All Files</p>
-        <!-- <p class="text-center px-4 hover:text-violet-500 hover:cursor-pointer">path: {{cwd}}</p> -->
-        <!-- <p><a href="/cd?path=.." class="pl-4 cursor-pointer hover:text-indigo-500">..</a></p> -->
+<!-- search -->
+<p class="text-lg mx-2 pt-4 text-center">Search your torrent list</p>
+<form class="border-2 border-gray-300 rounded-[5px] shadow-md mx-2 my-2 py-1 px-2 text-sm grid" action="/">
+<label class="pt-1">Search for current torrent</label>
+<div class="pt-1">
+  <input type="text" name="" id="" placeholder="Enter a name" class="py-1 px-1 mb-1 border-[1px] rounded-[4px] border-gray-400 w-[80%] lg:w-[90%] md:w-[90%] ">
+  <button class="text-white bg-blue-500 w-14 h-6 rounded-[3px] ml-2 px-1 hover:text-xs md:ml-6 lg:ml-4">Search</button>
+</div>
+</form>
+  
 
-    {% for entry in dirs %}
-        <div class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md">
-            <p><a href="{{ url_for('download_for_index', filename=entry[0]) }}" class="hover:text-blue-400">{{ entry[0] }}</a><span class="text-[10px] hover:text-indigo-500 hover:text-[11px]">&emsp;file</span></p>
-                <div class="text-sm text-gray-500 inline-flex">
-                    <p class="cursor-pointer">created at <span class="text-xs text-violet-500 hover:text-violet-700">{{ timestamp(entry[1]) }}</span>&ensp;&middot;&ensp;</p>
-                    <p class="cursor-pointer text-indigo-500 hover:text-indigo-700">{{ size(entry[2]) }}</p>
-                </div>
+  <p class="text-lg mx-2 pt-4 text-center">Upload Torrent</p>
+    <form class="border-2 border-gray-300 rounded-[5px] shadow-md mx-2 my-2 py-1 px-2 text-sm grid" action="/">
+        <label class="pb-1">Upload torrent File</label>
+        <input type="file" name="file" id="" class="pb-1">
+        <p class="text-center border-b-[1px]">OR</p>
+        <label class="pt-1">Paste link to torrent file</label>
+        <input type="url" name="url" id="" placeholder="Adding by links is unstable for now" readonly class="py-1 px-1 mb-1 border-[1px] rounded-[4px] border-gray-400">
+        <div class="text-center my-2">
+            <button type="submit" class="text-white bg-blue-500 w-12 h-6 rounded-[3px] hover:text-xs">Send</button>
         </div>
-    {% endfor %}
-    </div>
-
+    </form>
+</div>
 
 
 
