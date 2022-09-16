@@ -1,7 +1,9 @@
+from genericpath import isdir
+import re
 from flask import Flask, send_from_directory, render_template, url_for, request, send_file, redirect
 from dotenv import load_dotenv
 from datetime import datetime as dt
-import os, time, subprocess, shutil
+import os, time, subprocess, shutil, math
 
 load_dotenv()
 DOWNLOAD_FOLDER = os.environ.get("DOWNLOAD_FOLDER")
@@ -25,34 +27,31 @@ app.config["UPLOAD_FOLDER"] = DOWNLOAD_FOLDER
 @app.route("/index")
 def index():
 	all_files_info = []
-	# test
-	download = app.config["UPLOAD_FOLDER"]
-	folders = []
-	files = os.listdir(app.config["UPLOAD_FOLDER"]) # files in current directory
-
-	# same as above, used exclusively for each file's name folders are ignored
-	file_name = [file for file in files if file.endswith(ALLOWED_FILES)]
-	for file in files:
-		if os.path.isdir(f"{app.config['UPLOAD_FOLDER']}/{file}"):
-			folders.append(file)
-
-
-	# The complex list comprehension below generates a list of the file sizes
-	#  already converted to megabytes (mb)
-	file_size = [os.stat((f"{app.config['UPLOAD_FOLDER']}/{file}")) for file in files]
-	file_size = [round(file.st_size / (1024 * 1024), 3) for file in file_size] # converts to mb and rounds to 3 decimal places
-
-	# This complex list comprehension below generates a list of the file's timestamp
-	# converted parsed in strftime
-	created_at = [os.stat(f"{app.config['UPLOAD_FOLDER']}/{file}").st_mtime for file in files]
-	created_at = [dt.strftime(dt.fromtimestamp(mtime), "%Y-%m-%d %H:%M:%S") for mtime in created_at]
-
+	# # lambda function to convert secs since unix epoch
+	# created_at = lambda secs_since_unix_epoch: dt.strftime(
+	# 		dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
 	
-	for name, folder, timestamp, size in zip(files, folders, created_at, file_size):
-		all_files_info.extend([[name, folder, timestamp, size]])
-	return render_template("index.html", files=all_files_info, root=download)
+	# files, times, sizes = [], [], []
+	# files = [f"{app.config['UPLOAD_FOLDER']}/{i}" for i in os.listdir(app.config['UPLOAD_FOLDER'])
+	# 	if os.path.isfile(f"{app.config['UPLOAD_FOLDER']}/{i}")]
+	
+	# names = [i for i in os.listdir(app.config['UPLOAD_FOLDER']) if os.path.isfile(f"{app.config['UPLOAD_FOLDER']}/{i}")]
+	# times = [os.stat(file).st_mtime for file in files]
+	# sizes = [os.stat(file).st_size for file in files]
 
+	# # extend
+	# for name, time_, size in zip(names, times, sizes):
+	# 	all_files_info.extend([[name, time_, size]])
+	
 
+	# print(names)
+
+	# os.chdir(f'/{app.config["UPLOAD_FOLDER"]}')
+	# os.chdir("/data")
+	# print(os.chdir(os.path.abspath("data")))
+	# dirs = os.scandir(os.path.abspath(app.config["UPLOAD_FOLDER"]))
+	
+	return render_template("index.html")#, dirs=all_files_info, size=convert_size, timestamp=created_at)
 
 
 @app.route("/download")
@@ -61,18 +60,18 @@ def download_page():
 	return render_template("download.html", files=files)
 
 
-# @app.route("/download/<path:filename>")
-# def download2(filename):
-# 	uploads = app.config["UPLOAD_FOLDER"]
-# 	print(uploads)
-# 	return send_file(filename, as_attachment=True)
-
-
 @app.route("/download/<path:filename>")
 def download(filename):
 	filename = os.path.abspath(filename)
 	return send_file(filename, as_attachment=True)
 	# return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
+
+
+@app.route("/downloadIndex/<path:filename>")
+def download_for_index(filename):
+	uploads = app.config["UPLOAD_FOLDER"]
+	# print(uploads)
+	return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
 
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -104,15 +103,22 @@ def upload():
 
 @app.route('/folder')
 def folder_view():
-	# lambda function to convert size to mb only
-	to_mb = lambda size: round(size / (1024 * 1024), 2)
-
 	# lambda function to convert secs since unix epoch
 	created_at = lambda secs_since_unix_epoch: dt.strftime(
 			dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
 	
 	dirs = os.scandir()
-	return render_template("folderv2.html", dirs=dirs, to_mb=to_mb, timestamp=created_at, os=os, len=len, cwd=os.getcwd())
+	return render_template("folder.html", dirs=dirs, size=convert_size, timestamp=created_at, cwd=os.getcwd())
+
+
+@app.route('/folderv2')
+def folderv2_view():
+	# lambda function to convert secs since unix epoch
+	created_at = lambda secs_since_unix_epoch: dt.strftime(
+			dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
+	
+	dirs = os.scandir()
+	return render_template("folderv2.html", dirs=dirs, size=convert_size, timestamp=created_at, cwd=os.getcwd())
 
 
 @app.route('/cd')
@@ -121,7 +127,11 @@ def cd():
 		os.chdir(request.args.get('path'))
 	except PermissionError:
 		return "You do not have persmission to view this folder or file"
-	return redirect('/folder')
+
+
+	# redirect to file manager depending on the route and view ?
+	# not implemented
+	return redirect("/folderv2")
 
 
 @app.route('/md')
@@ -133,7 +143,7 @@ def md():
     except FileExistsError:
         return "Folder or file already exists"
     # redirect to file manager
-    return redirect('/folder')
+    return redirect('/folderv2')
 
 
 @app.route('/rm')
@@ -143,30 +153,27 @@ def rm():
     try:
         os.rmdir(folder) # only empty folders
     except OSError:
-        return """folder is not empty, please check before deleting""" # or <a href="force-rm?dir=dir">Here</a> to force delete"""
-    # shutil.rmtree(folder) # delete folders recursively
+        return """folder is not empty, please check before deleting"""
 
     # redirect to file manager
-    return redirect('/folder')
+    return redirect('/folderv2')
 
 
 @app.route('/force-rm')
 def force_rm():
     # create new folder
     folder = request.args.get('dir')
-    # try:
-    #     os.rmdir(folder) # only empty folders
-    # except OSError:
-    #     return """folder is not empty, please check before deleting or <a href="https://www.google.com">Here</a> to force delete"""
-    shutil.rmtree(folder) # delete folders recursively
-
+    try:
+        shutil.rmtree(folder) # delete folders recursively
+    except:
+        return "An error occurred"
+    
     # redirect to file manager
-    return redirect('/folder')
+    return redirect('/folderv2')
 
 
 @app.route('/view')
 def view():
-    # content = subprocess.check_output(f"bat {request.args.get('file')}")
     # get the file content
     with open(request.args.get('file'), 'r',) as file:
         return file.read().replace('\n', '<br>')
@@ -174,19 +181,30 @@ def view():
 
 @app.route('/rm-file')
 def rm_file():
-    # file = os.remove(request.args.get('file'))
+    # file = os.remove(request.args.get('file')) # deactivated intentionally 
     file = "to be deleted"
     print("Deleted ", file)
-    return redirect('/folder')
+    return redirect('/folderv2')
 
 
 @app.route('/view-img')
 def view_img():
     img = "an image"
+    print("Not implemented yet",)
+    return redirect('/folderv2')
 
-    print("Deleted ",)
-    return redirect('/folder')
 
+
+
+# FUNCTIONS
+def convert_size(size_bytes):
+    if size_bytes == 0:
+        return "0B"
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(size_bytes, 1024)))
+    p = math.pow(1024, i)
+    s = round(size_bytes / p, 2)
+    return f"{s} {size_name[i]}"
 
 
 

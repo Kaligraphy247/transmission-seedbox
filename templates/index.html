@@ -7,47 +7,21 @@
 {% block content %}
 
 
+    <div class="border-2 border-gray-300 rounded-sm shadow-sm mx-2 mt-8  mb-4 lg:w-[75%] lg:mx-auto">
+        <p class="text-lg mx-2 pt-4 text-center">All Files</p>
+        <!-- <p class="text-center px-4 hover:text-violet-500 hover:cursor-pointer">path: {{cwd}}</p> -->
+        <!-- <p><a href="/cd?path=.." class="pl-4 cursor-pointer hover:text-indigo-500">..</a></p> -->
 
-
-
-  <div class="border-2 border-gray-300 rounded-sm shadow-sm mx-2 mt-8  mb-4 lg:w-[75%] lg:mx-auto">
-    <p class="text-lg mx-2 pt-4 text-center">All Downloaded Files</p>
-
-    {% for file in files %}
-    <div class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md">
-      <p><a href="{{ url_for('download', filename=file[0]) }}" class="hover:text-blue-400">{{ file[0] }}</a></p>
-      <div class="text-sm text-gray-500 inline-flex">
-        <p class="cursor-pointer">created at <span class="text-xs text-violet-500 hover:text-violet-700 ">{{ file[2] }}</span>&ensp;&middot;&ensp;</p>
-        <p class="cursor-pointer text-indigo-500 hover:text-indigo-700">{{ file[3] }}mb</p>
-      </div>
-    </div>
-    <hr>
-    {% endfor %}
-   
-
-  </div>
-
-
-
-
-
-
-
-<!-- <div class="border-2 border-gray-300 rounded-sm shadow-sm mx-2 mt-8  mb-4 lg:w-[75%] lg:mx-auto">
-      <p class="text-lg mx-2 pt-4 text-center">All Downloaded Files</p>
-      <div class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md">
-        <p><a href="#" class="hover:text-blue-400">file ame</a></p>
-        <div class="text-sm text-gray-500 inline-flex">
-          <p class="cursor-pointer">created at&ensp;&middot;&ensp;</p>
-          <p class="cursor-pointer">Mb</p>
+    {% for entry in dirs %}
+        <div class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md">
+            <p><a href="{{ url_for('download_for_index', filename=entry[0]) }}" class="hover:text-blue-400">{{ entry[0] }}</a><span class="text-[10px] hover:text-indigo-500 hover:text-[11px]">&emsp;file</span></p>
+                <div class="text-sm text-gray-500 inline-flex">
+                    <p class="cursor-pointer">created at <span class="text-xs text-violet-500 hover:text-violet-700">{{ timestamp(entry[1]) }}</span>&ensp;&middot;&ensp;</p>
+                    <p class="cursor-pointer text-indigo-500 hover:text-indigo-700">{{ size(entry[2]) }}</p>
+                </div>
         </div>
-      </div>
-
-
-
-      </div>
-    </div> -->
-
+    {% endfor %}
+    </div>
 
 
 
