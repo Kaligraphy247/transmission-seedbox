@@ -8,14 +8,15 @@
     <title>{% block title%}Home{% endblock title %}</title>
   </head>
   <body class="body-font min-h-[100%]">
-    <header class="border-b-2 border-gray-200 rounded-sm  py-8 text-center text-xl">
+    <header
+      class="border-b-2 border-gray-100 shadow-md rounded-sm shadow-gray-300 py-8 text-center text-xl">
       <ul class="inline-flex space-x-16 md:space-x-48 lg:space-x-96">
         <li class="list-none">
           <a href="{{ url_for('index') }}" class="hover:text-gray-600 active:text-green-500">Home</a>
         </li>
         <!-- <li class="list-none"><a href="#" class="hover:text-gray-600 active:text-green-500">Download</a></li> -->
         <li class="list-none">
-          <a href="{{ url_for('folderv2_view') }}" class="hover:text-gray-600 active:text-green-500">Folders</a>
+          <a href="{{ url_for('upload') }}" class="hover:text-gray-600 active:text-green-500">Upload</a>
         </li>
       </ul>
     </header>
@@ -26,7 +27,7 @@
 
     <p class="mx-2 mb-1 text-xs text-center text-gray-400 hover:text-gray-600 bottom-0">
         Check out my other works on <a href="https://github.com/Kaligraphy247" class="hover:text-violet-600" target="_blank">Github</a></p>
-    <p class="mx-2 mb-2 text-xs text-center text-gray-400 hover:text-gray-600">I am available for colabs, gainful employment or just side project</p>
+      <p class="mx-2 mb-2 text-xs text-center text-gray-400 hover:text-gray-600">I am available for colabs, gainful employment or just side project</p>
   
   
   

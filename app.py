@@ -1,51 +1,47 @@
+<<<<<<< HEAD
 from flask import Flask, send_from_directory, render_template, url_for, request
+=======
+from flask import Flask, send_from_directory, render_template, request, send_file, redirect
+>>>>>>> folder
 from dotenv import load_dotenv
 from datetime import datetime as dt
-import os, time, subprocess
+import os, time, subprocess, shutil, math
 
 load_dotenv()
 DOWNLOAD_FOLDER = os.environ.get("DOWNLOAD_FOLDER")
 TEMP_UPLOAD_FOLDER = os.environ.get("TEMP_UPLOAD_FOLDER")
 ALLOWED_FILES = os.environ.get("ALLOWED_FILES")
-ALLOWED_FILES = tuple(ALLOWED_FILES)
+ALLOWED_FILES = tuple(ALLOWED_FILES) # just to be explicit, it could have been done the first line
 app = Flask(__name__)
 
 
 app.config["UPLOAD_FOLDER"] = DOWNLOAD_FOLDER
 
+# error handlers
+## only done, if using blueprints
+# app.register_error_handler(404, error404)
 
+@app.errorhandler(404)
+def error404(error):
+	"""Not Found error, 404"""
+	return render_template(template_name_or_list="404.html")
+	# return "404 page i guess ☠🤥"
 
 @app.route("/")
 @app.route("/index")
 def index():
 	all_files_info = []
-	# test
-	download = app.config["UPLOAD_FOLDER"]
-	folders = []
-	files = os.listdir(app.config["UPLOAD_FOLDER"]) # files in current directory
-
-	# same as above, used exclusively for each file's name folders are ignored
-	file_name = [file for file in files if file.endswith(ALLOWED_FILES)]
-	for file in files:
-		if os.path.isdir(f"{app.config['UPLOAD_FOLDER']}/{file}"):
-			folders.append(file)
-
-
-	# The complex list comprehension below generates a list of the file sizes
-	#  already converted to megabytes (mb)
-	file_size = [os.stat((f"{app.config['UPLOAD_FOLDER']}/{file}")) for file in files]
-	file_size = [round(file.st_size / (1024 * 1024), 3) for file in file_size] # converts to mb and rounds to 3 decimal places
-
-	# This complex list comprehension below generates a list of the file's timestamp
-	# converted parsed in strftime
-	created_at = [os.stat(f"{app.config['UPLOAD_FOLDER']}/{file}").st_mtime for file in files]
-	created_at = [dt.strftime(dt.fromtimestamp(mtime), "%Y-%m-%d %H:%M:%S") for mtime in created_at]
-
+	# # lambda function to convert secs since unix epoch
+	# created_at = lambda secs_since_unix_epoch: dt.strftime(
+	# 		dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
 	
-	for name, folder, timestamp, size in zip(files, folders, created_at, file_size):
-		all_files_info.extend([[name, folder, timestamp, size]])
-	return render_template("index.html", files=all_files_info, root=download)
 
+	# os.chdir(f'/{app.config["UPLOAD_FOLDER"]}')
+	# os.chdir("/data")
+	# print(os.chdir(os.path.abspath("data")))
+	# dirs = os.scandir(os.path.abspath(app.config["UPLOAD_FOLDER"]))
+	
+	return render_template("index.html")# timestamp=created_at)
 
 
 @app.route("/download")
@@ -56,9 +52,17 @@ def download_page():
 
 @app.route("/download/<path:filename>")
 def download(filename):
+	filename = os.path.abspath(filename)
+	return send_file(filename, as_attachment=True)
+	# return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
+
+
+@app.route("/downloadIndex/<path:filename>")
+def download_for_index(filename):
 	uploads = app.config["UPLOAD_FOLDER"]
-	print(uploads)
+	# print(uploads)
 	return send_from_directory(uploads, path=filename, as_attachment=True)#, as_attachment=True
+
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
@@ -75,8 +79,7 @@ def upload():
 			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a {temp_file}", shell=True)
 			time.sleep(60) # wait, 1 minute and then clear .torrent file
 			os.remove(temp_file)
-			print(f"deleted torrent file: {temp_file}")
-
+			print(f"Deleted torrent file: {temp_file}")
 
 			# subprocess.Popen(f'echo {file.filename}', shell=True) # debug
 			# subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{file}'", shell=True)
@@ -87,7 +90,110 @@ def upload():
 	return render_template('upload.html')
 
 
+@app.route('/folder')
+def folder_view():
+	# lambda function to convert secs since unix epoch
+	created_at = lambda secs_since_unix_epoch: dt.strftime(
+			dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
+	
+	dirs = os.scandir()
+	return render_template("folder.html", dirs=dirs, size=convert_size, timestamp=created_at, cwd=os.getcwd())
 
+
+@app.route('/folderv2')
+def folderv2_view():
+	# lambda function to convert secs since unix epoch
+	created_at = lambda secs_since_unix_epoch: dt.strftime(
+			dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
+	
+	dirs = os.scandir()
+	return render_template("folderv2.html", dirs=dirs, size=convert_size, timestamp=created_at, cwd=os.getcwd())
+
+
+@app.route('/cd')
+def cd():
+	try:
+		os.chdir(request.args.get('path'))
+	except PermissionError:
+		return "You do not have persmission to view this folder or file"
+
+
+	# redirect to file manager depending on the route and view ?
+	# not implemented
+	return redirect("/folderv2")
+
+
+@app.route('/md')
+def md():
+    # create new folder
+    new_folder = request.args.get('folder')
+    try:
+        os.mkdir(new_folder)
+    except FileExistsError:
+        return "Folder or file already exists"
+    # redirect to file manager
+    return redirect('/folderv2')
+
+
+@app.route('/rm')
+def rm():
+    # create new folder
+    folder = request.args.get('dir')
+    try:
+        os.rmdir(folder) # only empty folders
+    except OSError:
+        return """folder is not empty, please check before deleting"""
+
+    # redirect to file manager
+    return redirect('/folderv2')
+
+
+@app.route('/force-rm')
+def force_rm():
+    # create new folder
+    folder = request.args.get('dir')
+    try:
+        shutil.rmtree(folder) # delete folders recursively
+    except:
+        return "An error occurred"
+    
+    # redirect to file manager
+    return redirect('/folderv2')
+
+
+@app.route('/view')
+def view():
+    # get the file content
+    with open(request.args.get('file'), 'r',) as file:
+        return file.read().replace('\n', '<br>')
+
+
+@app.route('/rm-file')
+def rm_file():
+    # file = os.remove(request.args.get('file')) # deactivated intentionally 
+    file = "to be deleted"
+    print("Deleted ", file)
+    return redirect('/folderv2')
+
+
+@app.route('/view-img')
+def view_img():
+    img = "an image"
+    print("Not implemented yet",)
+    return redirect('/folderv2')
+
+
+
+
+# FUNCTIONS
+def convert_size(size_bytes):
+    if size_bytes == 0:
+        return "0B"
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(size_bytes, 1024)))
+    p = math.pow(1024, i)
+    s = round(size_bytes / p, 2)
+    return f"{s} {size_name[i]}"
 
 
 
