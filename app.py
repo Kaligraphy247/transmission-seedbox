@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 from flask import Flask, send_from_directory, render_template, url_for, request
-=======
 from flask import Flask, send_from_directory, render_template, request, send_file, redirect
->>>>>>> folder
 from dotenv import load_dotenv
 from datetime import datetime as dt
 import os, time, subprocess, shutil, math
