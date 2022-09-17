@@ -89,8 +89,7 @@ def upload():
 			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a {temp_file}", shell=True)
 			time.sleep(60) # wait, 1 minute and then clear .torrent file
 			os.remove(temp_file)
-			print(f"deleted torrent file: {temp_file}")
-
+			print(f"Deleted torrent file: {temp_file}")
 
 			# subprocess.Popen(f'echo {file.filename}', shell=True) # debug
 			# subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{file}'", shell=True)
