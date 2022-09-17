@@ -1,6 +1,4 @@
-from genericpath import isdir
-import re
-from flask import Flask, send_from_directory, render_template, url_for, request, send_file, redirect
+from flask import Flask, send_from_directory, render_template, request, send_file, redirect
 from dotenv import load_dotenv
 from datetime import datetime as dt
 import os, time, subprocess, shutil, math
@@ -9,19 +7,21 @@ load_dotenv()
 DOWNLOAD_FOLDER = os.environ.get("DOWNLOAD_FOLDER")
 TEMP_UPLOAD_FOLDER = os.environ.get("TEMP_UPLOAD_FOLDER")
 ALLOWED_FILES = os.environ.get("ALLOWED_FILES")
-ALLOWED_FILES = tuple(ALLOWED_FILES)
+ALLOWED_FILES = tuple(ALLOWED_FILES) # just to be explicit, it could have been done the first line
 app = Flask(__name__)
 
 
 app.config["UPLOAD_FOLDER"] = DOWNLOAD_FOLDER
 
 # error handlers
-# app.register_error_handler(500, error_500)
+## only done, if using blueprints
+# app.register_error_handler(404, error404)
 
-# @app.errorhandler(500)
-# def error_500(e):
-# 	'''Internal server error handler'''
-# 	return "Error 500, nothing much to tell you at this point", 500
+@app.errorhandler(404)
+def error404(error):
+	"""Not Found error, 404"""
+	return render_template(template_name_or_list="404.html")
+	# return "404 page i guess ☠🤥"
 
 @app.route("/")
 @app.route("/index")
@@ -31,27 +31,13 @@ def index():
 	# created_at = lambda secs_since_unix_epoch: dt.strftime(
 	# 		dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
 	
-	# files, times, sizes = [], [], []
-	# files = [f"{app.config['UPLOAD_FOLDER']}/{i}" for i in os.listdir(app.config['UPLOAD_FOLDER'])
-	# 	if os.path.isfile(f"{app.config['UPLOAD_FOLDER']}/{i}")]
-	
-	# names = [i for i in os.listdir(app.config['UPLOAD_FOLDER']) if os.path.isfile(f"{app.config['UPLOAD_FOLDER']}/{i}")]
-	# times = [os.stat(file).st_mtime for file in files]
-	# sizes = [os.stat(file).st_size for file in files]
-
-	# # extend
-	# for name, time_, size in zip(names, times, sizes):
-	# 	all_files_info.extend([[name, time_, size]])
-	
-
-	# print(names)
 
 	# os.chdir(f'/{app.config["UPLOAD_FOLDER"]}')
 	# os.chdir("/data")
 	# print(os.chdir(os.path.abspath("data")))
 	# dirs = os.scandir(os.path.abspath(app.config["UPLOAD_FOLDER"]))
 	
-	return render_template("index.html")#, dirs=all_files_info, size=convert_size, timestamp=created_at)
+	return render_template("index.html")# timestamp=created_at)
 
 
 @app.route("/download")
