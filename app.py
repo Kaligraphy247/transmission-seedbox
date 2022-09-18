@@ -85,7 +85,7 @@ def upload():
 			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{url}'", shell=True)
 		# print(file.filename, url)
 	# return render_template('upload.html')
-	return redirect('/index')
+	return redirect('/index#upload')
 
 
 @app.route('/folder')
