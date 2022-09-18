@@ -81,6 +81,17 @@ def upload():
 	return redirect('/index#upload')
 
 
+@app.route("/search", methods=["GET", "POST"])
+def search_torrent():
+	if request.method =="POST":
+		search_query = request.form.get("search_query")
+		print(search_query)
+
+
+	# return render_template("search.html")
+	return search_query
+
+
 @app.route('/folder')
 def folder_view():
 	dirs = os.scandir()

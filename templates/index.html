@@ -10,10 +10,10 @@
 
 <!-- search -->
 <p class="text-lg mx-2 pt-4 text-center">Search your torrent list</p>
-<form class="border-2 border-gray-300 rounded-[5px] shadow-md mx-2 my-2 py-1 px-2 text-sm grid" action="/">
+<form method="POST" action="/search" id="#search" class="border-2 border-gray-300 rounded-[5px] shadow-md mx-2 my-2 py-1 px-2 text-sm grid">
 <label class="pt-1">Search for current torrent</label>
 <div class="pt-1">
-  <input type="text" name="" id="" placeholder="Enter a name (not implented yet)" class="py-1 px-1 mb-1 border-[1px] rounded-[4px] border-gray-400 w-[80%] lg:w-[90%] md:w-[90%] ">
+  <input type="text" name="search_query" id="" placeholder="Enter a name (not implented yet)" class="py-1 px-1 mb-1 border-[1px] rounded-[4px] border-gray-400 w-[80%] lg:w-[90%] md:w-[90%] ">
   <button class="text-white bg-blue-500 w-14 h-6 rounded-[3px] ml-2 px-1 hover:text-xs md:ml-6 lg:ml-4">Search</button>
 </div>
 </form>
@@ -25,7 +25,7 @@
         <input type="file" name="file" id="" class="pb-1">
         <p class="text-center border-b-[1px]">OR</p>
         <label class="pt-1">Paste link to torrent file</label>
-        <input type="url" name="url" id="" placeholder="Adding by links is unstable for now"  class="py-1 px-1 mb-1 border-[1px] rounded-[4px] border-gray-400">
+        <input type="url" name="url" id="" placeholder="Please enter a valid torrent link"  class="py-1 px-1 mb-1 border-[1px] rounded-[4px] border-gray-400">
         <div class="text-center my-2">
             <button type="submit" class="text-white bg-blue-500 w-12 h-6 rounded-[3px] hover:text-xs">Send</button>
         </div>
