@@ -28,11 +28,6 @@ def error404(error):
 @app.route("/index")
 def index():
 	all_files_info = []
-	# # lambda function to convert secs since unix epoch
-	# created_at = lambda secs_since_unix_epoch: dt.strftime(
-	# 		dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
-	
-
 	# os.chdir(f'/{app.config["UPLOAD_FOLDER"]}')
 	# os.chdir("/data")
 	# print(os.chdir(os.path.abspath("data")))
@@ -67,7 +62,7 @@ def upload():
 		file = request.files['file']
 		url = request.form.get('url')
 
-		if file != '':
+		if file.filename != '':
 			temp_file = f"{os.path.join(TEMP_UPLOAD_FOLDER)}/{file.filename}"
 			# temp_file = f"data/uploads/{file.filename}"
 			print(temp_file)
@@ -78,32 +73,22 @@ def upload():
 			os.remove(temp_file)
 			print(f"Deleted torrent file: {temp_file}")
 
-			# subprocess.Popen(f'echo {file.filename}', shell=True) # debug
-			# subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{file}'", shell=True)
 		elif url != '':
 			# subprocess.Popen(f'echo {url}', shell=True) # debug
 			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{url}'", shell=True)
 		# print(file.filename, url)
-	# return render_template('upload.html')
+	# return render_template('upload.html') # debug, for seperate upload page
 	return redirect('/index#upload')
 
 
 @app.route('/folder')
 def folder_view():
-	# lambda function to convert secs since unix epoch
-	created_at = lambda secs_since_unix_epoch: dt.strftime(
-			dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
-	
 	dirs = os.scandir()
 	return render_template("folder.html", dirs=dirs, size=convert_size, timestamp=created_at, cwd=os.getcwd())
 
 
 @app.route('/folderv2')
 def folderv2_view():
-	# lambda function to convert secs since unix epoch
-	created_at = lambda secs_since_unix_epoch: dt.strftime(
-			dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
-	
 	dirs = os.scandir()
 	return render_template("folderv2.html", dirs=dirs, size=convert_size, timestamp=created_at, cwd=os.getcwd())
 
@@ -192,6 +177,12 @@ def convert_size(size_bytes):
     p = math.pow(1024, i)
     s = round(size_bytes / p, 2)
     return f"{s} {size_name[i]}"
+
+
+# lambda function to convert secs since unix epoch
+created_at = lambda secs_since_unix_epoch: dt.strftime(
+		dt.fromtimestamp(secs_since_unix_epoch), "%Y-%m-%d %H:%M:%S")
+
 
 
 
