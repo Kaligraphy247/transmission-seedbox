@@ -90,7 +90,7 @@ def search_torrent():
 		
 		# with open("search_result", 'r') as f:
 		# with open("testawkfull", 'r') as f:
-		# 	search_result = f.readlines()[1:-1]
+		# 	search_result = f.read()
 
 
 		# subprocess is finicky here, os.system will be used instead
@@ -103,7 +103,7 @@ def search_torrent():
 		with open("search_result", 'r') as f:
 			search_result = f.read()
 
-	return render_template("search.html", query=search_query, results=search_result)
+	return render_template("search.html", query=search_query, result=search_result)
 	# return search_result
 
 
