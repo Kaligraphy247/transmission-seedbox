@@ -679,10 +679,6 @@ video {
   overflow-x: auto;
 }
 
-.overflow-y-auto{
-  overflow-y: auto;
-}
-
 .whitespace-nowrap{
   white-space: nowrap;
 }
@@ -826,6 +822,10 @@ video {
 
 .pb-1{
   padding-bottom: 0.25rem;
+}
+
+.pt-2{
+  padding-top: 0.5rem;
 }
 
 .text-center{
