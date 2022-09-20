@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from datetime import datetime as dt
 import os, time, subprocess, shutil, math
 
+
 load_dotenv()
 DOWNLOAD_FOLDER = os.environ.get("DOWNLOAD_FOLDER")
 TEMP_UPLOAD_FOLDER = os.environ.get("TEMP_UPLOAD_FOLDER")
@@ -83,13 +84,22 @@ def upload():
 
 @app.route("/search", methods=["GET", "POST"])
 def search_torrent():
-	if request.method =="POST":
+	if request.method == "POST":
 		search_query = request.form.get("search_query")
-		print(search_query)
+		# print(search_query) # debug
+		
+		# with open("search_result", 'r') as f:
+		# with open("testawkfull", 'r') as f:
+			# search_result = f.read()
 
+		# subprocess is finicky here, os.system will be used instead
+		# search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk 'BEGIN{{IGNORECASE = 1}}/{search_query}/;' > search_result")
+		search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk '/{search_query}/' > search_result")
+		with open("search_result", 'r') as f:
+			search_result = f.read()
 
-	# return render_template("search.html")
-	return search_query
+	return render_template("search.html", query=search_query, result=search_result)
+	# return search_result
 
 
 @app.route('/folder')
