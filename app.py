@@ -86,25 +86,19 @@ def upload():
 def search_torrent():
 	if request.method == "POST":
 		search_query = request.form.get("search_query")
-		# print(search_query) # debug
 		
 		# with open("search_result", 'r') as f:
-		# with open("testawkfull", 'r') as f:
 		# 	search_result = f.read()
 
-
 		# subprocess is finicky here, os.system will be used instead
+
 		# case insensitive
-		# search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk 'BEGIN{{IGNORECASE = 1}}/{search_query}/;' > search_result")
-		# search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk 'BEGIN{{IGNORECASE = 1}}NR==1/{search_query}/{{print $1}};' > search_result")
-		
+		# search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk 'BEGIN{{IGNORECASE = 1}}/{search_query}/;' > search_result")		
 		search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk '/{search_query}/' > search_result")
-		# search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk 'NR==1/{search_query}/{{print $1}}' > search_result")
 		with open("search_result", 'r') as f:
 			search_result = f.read()
 
 	return render_template("search.html", query=search_query, result=search_result)
-	# return search_result
 
 
 @app.route('/folder')
