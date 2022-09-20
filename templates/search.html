@@ -4,13 +4,22 @@
 
 {% block content %}
 
+
     <div class="border-2 border-gray-300 my-24 mx-16 px-2 py-2 rounded-sm shadow-md">
         <p class="px-2">Result for <span class="font-black">"{{ query }}"</span> :</p>
         <div class="border-2 border-gray-100 rounded-[3px] shadow-md px-2 py-2">
-            {% for result in results %}
             <p class="font-mono text-sm pt-2 border-b border-gray-300">{{ result }}</p>
-            {% endfor %}
         </div>
     </div>
+
+    <!-- feature on the way -->
+    <!-- <div class="border-2 border-gray-300 my-24 mx-16 px-2 py-2 rounded-sm shadow-md">
+        <p class="px-2">Result for <span class="font-black">"{{ query }}"</span> :</p>
+        <div class="border-2 border-gray-100 rounded-[3px] shadow-md px-2 py-2">
+            {# for result in results #}
+            <p class="font-mono text-sm pt-2 border-b border-gray-300">{{ result }}</p>
+            {# endfor #}
+        </div>
+    </div> -->
 
 {% endblock %}

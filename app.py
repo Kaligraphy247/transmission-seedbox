@@ -101,7 +101,7 @@ def search_torrent():
 		search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk '/{search_query}/' > search_result")
 		# search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk 'NR==1/{search_query}/{{print $1}}' > search_result")
 		with open("search_result", 'r') as f:
-			search_result = f.readlines()[1:-1]
+			search_result = f.read()
 
 	return render_template("search.html", query=search_query, results=search_result)
 	# return search_result
