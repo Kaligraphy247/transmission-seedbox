@@ -69,14 +69,14 @@ def upload():
 			print(temp_file)
 			file.save(temp_file)
 			time.sleep(5) # wait 5 seconds after file is saved? an add torrent
-			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a {temp_file}", shell=True)
+			subprocess.Popen(f"transmission-remote -n 'transmission:transmission' -a {temp_file}", shell=True)
 			time.sleep(60) # wait, 1 minute and then clear .torrent file
 			os.remove(temp_file)
 			print(f"Deleted torrent file: {temp_file}")
 
 		elif url != '':
 			# subprocess.Popen(f'echo {url}', shell=True) # debug
-			subprocess.Popen(f"sudo transmission-remote -n 'transmission:transmission' -a '{url}'", shell=True)
+			subprocess.Popen(f"transmission-remote -n 'transmission:transmission' -a '{url}'", shell=True)
 		# print(file.filename, url)
 	# return render_template('upload.html') # debug, for seperate upload page
 	return redirect('/index#upload')
@@ -90,11 +90,16 @@ def search_torrent():
 		
 		# with open("search_result", 'r') as f:
 		# with open("testawkfull", 'r') as f:
-			# search_result = f.read()
+		# 	search_result = f.read().replace("\n", '\t\t\t\t')
+
 
 		# subprocess is finicky here, os.system will be used instead
+		# case insensitive
 		# search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk 'BEGIN{{IGNORECASE = 1}}/{search_query}/;' > search_result")
-		search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk '/{search_query}/' > search_result")
+		search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk 'BEGIN{{IGNORECASE = 1}}NR==1/{search_query}/{{print $1}};' > search_result")
+		
+		# search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk '/{search_query}/' > search_result")
+		search_result = os.system(f"transmission-remote -n transmission:transmission -l | awk 'NR==1/{search_query}/{{print $1}}' > search_result")
 		with open("search_result", 'r') as f:
 			search_result = f.read()
 
