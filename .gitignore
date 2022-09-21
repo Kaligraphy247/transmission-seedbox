@@ -9,3 +9,6 @@ build-ui/package-lock.json
 hel.py
 test**
 search_**
+bin
+lib64
+lib

@@ -117,6 +117,7 @@ def folderv2_view():
 def cd():
 	try:
 		os.chdir(request.args.get('path'))
+		print("Current Working Directory:", os.getcwd()) # debug
 	except PermissionError:
 		return "You do not have persmission to view this folder or file"
 
