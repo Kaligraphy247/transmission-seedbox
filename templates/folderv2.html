@@ -13,7 +13,7 @@
     {% for entry in dirs %}        
         {% if entry.is_dir() %}
             <div class="mx-2 my-4 border-2 border-gray-300 px-2 py-1 rounded-[5px] shadow-sm hover:shadow-md">
-            <p><a href="cd?path={{ entry.path }}" class="hover:text-blue-400">{{ entry.name }}</a><span class="text-[10px] hover:text-indigo-500 hover:text-[11px]">&emsp;folder</span></p>
+            <p><a href="cd?path={{ entry.name }}" class="hover:text-blue-400">{{ entry.name }}</a><span class="text-[10px] hover:text-indigo-500 hover:text-[11px]">&emsp;folder</span></p>
                 <div class="text-sm text-gray-500 inline-flex">
                     <p class="cursor-pointer">created at <span class="text-xs text-violet-500 hover:text-violet-700">{{ timestamp(entry.stat().st_mtime) }}</span>&ensp;&middot;&ensp;</p>
                     <p class="cursor-pointer text-indigo-500 hover:text-indigo-700">4.0kb</p>

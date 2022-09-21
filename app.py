@@ -120,6 +120,9 @@ def cd():
 		print("Current Working Directory:", os.getcwd()) # debug
 	except PermissionError:
 		return "You do not have persmission to view this folder or file"
+	except FileNotFoundError:
+		# return os.chdir(path=request.args.get('path'))
+		return "File or folder was not found or does not exists"
 
 
 	# redirect to file manager depending on the route and view ?
