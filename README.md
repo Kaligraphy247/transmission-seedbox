@@ -73,4 +73,4 @@ sudo cp ./transmission-ui.serivice /etc/systemd/system
 ```
 > **Note:** Make sure you are copying from the your local repo directory<br>
 
-As usual, after copying you need to reload reload the service. just follow the same procedure as [before](https://github.com/Kaligraphy247/transmission-seedbox#start-service) 👈
+As usual, after copying you need to reload reload the service. just follow the same procedure as [before](#start-service) 👈
