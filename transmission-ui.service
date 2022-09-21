@@ -1,0 +1,11 @@
+[Unit]
+Description=Gunicorn server for transmission-seedbox-ui
+
+[Service]
+User=<your username>
+WorkingDirectory=<path to seedbox>
+ExecStart=/bin/bash -c 'cd <path to seedbox> && source bin/activate && gunicorn wsgi:app'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
