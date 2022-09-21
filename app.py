@@ -113,7 +113,7 @@ def folderv2_view():
 	return render_template("folderv2.html", dirs=dirs, size=convert_size, timestamp=created_at, cwd=os.getcwd())
 
 
-@app.route('/cd')
+@app.route('/folderv2/cd')
 def cd():
 	try:
 		os.chdir(request.args.get('path'))
