@@ -1,12 +1,16 @@
 # transmission-seedbox
-This README is incomplete
+> ## This README is incomplete
 
-This assumes that you already have transmission installed and setup already
+> ###  This assumes that you already have transmission installed and properly setup.
+<br>
 
 The Folder view sometimes returns an error ([see here](#if-you-get-this-error-message)), simply add a "/" to the end of url in the address bar
 
-...
+This errors is worse on the latest version of Debian provided by GCP, it's less serious on AWS and 99.9% non existent on your local system, e.g. your laptop.
+If you run your own local server, it might not happen at all. File browser works on Windows and any Unix-like OS with Python 3 (tested on python 3.10)
 
+...
+<br><br>
 
 ## Making gunicorn run as a daemon
 - To run gunicorn as a daemon, you need to create a service file in `/etc/systemd/system`
